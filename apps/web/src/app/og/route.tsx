@@ -6,16 +6,18 @@ import { metadata as meta } from "@/app/config";
 import DarkSvg from "./patterns/dark-svg";
 import LightSvg from "./patterns/light-svg";
 
-export const runtime = "edge";
+const INTER_FONT_PATH = "/fonts/Inter-SemiBold.ttf";
 
-export async function GET(): Promise<Response | ImageResponse> {
+export async function GET(
+  request: Request,
+): Promise<Response | ImageResponse> {
   try {
     const headersList = await headers();
     const isLight = headersList.get("Sec-CH-Prefers-Color-Scheme") === "light";
 
-    const inter = await fetch(
-      new URL("../../../public/fonts/Inter-SemiBold.ttf", import.meta.url),
-    ).then((res) => res.arrayBuffer());
+    const inter = await fetch(new URL(INTER_FONT_PATH, request.url)).then(
+      (res) => res.arrayBuffer(),
+    );
 
     const { title, description } = {
       title: meta.author.name,
